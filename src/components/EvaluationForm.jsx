@@ -386,7 +386,7 @@ export default function EvaluationForm() {
               fontWeight: 500
             }}>
               <CheckCircle2 size={18} />
-              <span>Paso Final: Toca la <b>última palabra</b> leída por el estudiante para registrar resultados.</span>
+              <span>Paso Final: Toca la última palabra leída por el estudiante para registrar resultados.</span>
             </div>
           )}
         </div>
@@ -426,7 +426,7 @@ export default function EvaluationForm() {
               <div style={{ textAlign: 'center', width: '100%', marginTop: '0.5rem' }}>
                 {readingState === 'idle' && (
                   <div style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>
-                    Listo para comenzar. Presiona el <b>Verde</b>.
+                    Listo para comenzar. Presiona el botón Verde.
                   </div>
                 )}
                 {readingState === 'reading' && (
