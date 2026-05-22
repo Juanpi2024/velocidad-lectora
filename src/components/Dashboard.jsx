@@ -23,19 +23,21 @@ const BENCHMARKS = {
 
 // Colors mapping matching the Excel sheet but styled with premium modern palettes
 const SPEED_COLORS = {
-  'Muy Lenta': '#94a3b8',   // Slate
-  'Lenta': '#cbd5e1',       // Light Slate
-  'Media Baja': '#93c5fd',  // Light Blue
-  'Media Alta': '#3b82f6',  // Medium Blue
-  'Rápida': '#0ea5e9',      // Sky Blue
-  'Muy Rápida': '#10b981'   // Emerald
+  'Muy Lenta': '#f43f5e',   // Rose Red
+  'Lenta': '#fb923c',       // Warm Orange
+  'Media Baja': '#fbbf24',  // Gold/Yellow
+  'Media Alta': '#22d3ee',  // Bright Cyan/Turquoise
+  'Rápida': '#6366f1',      // Electric Indigo
+  'Muy Rápida': '#10b981'   // Emerald Green
 };
 
 const LEVEL_COLORS = {
-  'INICIAL': '#64748b',     // Slate Grey
+  'INICIAL': '#f43f5e',     // Rose Red
   'INTERMEDIO': '#3b82f6',  // Royal Blue
   'AVANZADO': '#10b981'     // Emerald Green
 };
+
+const ALL_GRADES = ['1º', '2º', '3º', '4º', '5º', '6º', '7º', '8º'];
 
 export default function Dashboard() {
   const { students, texts, evaluations } = useData();
@@ -56,13 +58,7 @@ export default function Dashboard() {
     return '2º'; // fallback
   };
 
-  // Get unique grades from registered students to populate grade selector
-  const availableGrades = useMemo(() => {
-    const grades = new Set(students.map(s => normalizeGrade(s.grade)));
-    // Ensure 2º is in the list, and sort them
-    if (grades.size === 0) grades.add('2º');
-    return Array.from(grades).sort();
-  }, [students]);
+  // We use static ALL_GRADES to ensure the teacher can select any Mineduc grade level
 
   // Categorize a student's speed based on their PPM and grade
   const getSpeedCategory = (grade, ppm) => {
@@ -237,17 +233,17 @@ export default function Dashboard() {
               style={{ 
                 fontSize: '1.1rem', 
                 fontWeight: 'bold', 
-                padding: '0.5rem 2rem 0.5rem 1rem', 
+                padding: '0.5rem 2.2rem 0.5rem 1rem', 
                 borderRadius: '10px',
                 borderColor: 'var(--primary)',
                 background: 'white',
-                minWidth: '100px',
+                minWidth: '150px',
                 cursor: 'pointer',
                 appearance: 'none'
               }}
             >
-              {availableGrades.map(grade => (
-                <option key={grade} value={grade}>{grade}</option>
+              {ALL_GRADES.map(grade => (
+                <option key={grade} value={grade}>{grade} Básico</option>
               ))}
             </select>
             <ChevronDown size={18} color="var(--primary)" style={{ position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
@@ -373,7 +369,10 @@ export default function Dashboard() {
                       ))}
                     </Pie>
                     <Tooltip 
-                      formatter={(value, name, props) => [`${value} Alumnos (${props.payload.percentage}%)`, name]}
+                      formatter={(value, name, props) => {
+                        const pct = props?.payload?.percentage ?? 0;
+                        return [`${value} Alumnos (${pct}%)`, name];
+                      }}
                       contentStyle={{ borderRadius: '8px', border: '1px solid var(--border)', boxShadow: 'var(--shadow-md)' }}
                     />
                     <Legend 
@@ -407,7 +406,10 @@ export default function Dashboard() {
                     <XAxis dataKey="name" fontSize={11} stroke="var(--text-muted)" />
                     <YAxis type="number" domain={[0, 100]} unit="%" stroke="var(--text-muted)" fontSize={11} />
                     <Tooltip 
-                      formatter={(value, name, props) => [`${props.payload.Alumnos} Alumnos (${value}%)`, 'Proporción']}
+                      formatter={(value, name, props) => {
+                        const alumnos = props?.payload?.Alumnos ?? 0;
+                        return [`${alumnos} Alumnos (${value}%)`, 'Proporción'];
+                      }}
                       contentStyle={{ borderRadius: '8px', border: '1px solid var(--border)', boxShadow: 'var(--shadow-md)' }} 
                     />
                     <Bar dataKey="Porcentaje" radius={[6, 6, 0, 0]} barSize={40} name="Nivel">

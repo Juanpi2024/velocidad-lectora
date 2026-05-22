@@ -37,14 +37,23 @@ export default function StudentsManager() {
             </div>
             <div className="form-group">
               <label className="form-label">Curso / Grado</label>
-              <input 
-                type="text" 
+              <select 
                 className="form-control" 
-                placeholder="Ej. 5to Básico" 
                 value={grade} 
                 onChange={(e) => setGrade(e.target.value)} 
-                required 
-              />
+                style={{ fontSize: '1.05rem', padding: '0.6rem' }}
+                required
+              >
+                <option value="">-- Seleccionar Curso --</option>
+                <option value="1º">1º Básico</option>
+                <option value="2º">2º Básico</option>
+                <option value="3º">3º Básico</option>
+                <option value="4º">4º Básico</option>
+                <option value="5º">5º Básico</option>
+                <option value="6º">6º Básico</option>
+                <option value="7º">7º Básico</option>
+                <option value="8º">8º Básico</option>
+              </select>
             </div>
             <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>
               <UserPlus size={18} /> Guardar Alumno
