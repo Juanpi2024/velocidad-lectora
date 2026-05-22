@@ -58,14 +58,14 @@ export function DataProvider({ children }) {
     setEvaluations(evaluations.filter(e => e.textId !== id));
   };
 
-  const addEvaluation = (studentId, textId, timeSeconds, errors, comprehensionScore) => {
+  const addEvaluation = (studentId, textId, timeSeconds, errors, comprehensionScore, wordsRead = null) => {
     const text = texts.find(t => t.id === textId);
     if (!text) return;
     
-    // PPM = (Total Words - Errors) / (Time in minutes)
-    // Or simpler: (Total Words) / (Time in minutes)
+    // PPM = (Words Read - Errors) / (Time in minutes)
+    const actualWords = wordsRead !== null ? parseInt(wordsRead) : text.wordCount;
     const timeMinutes = timeSeconds / 60;
-    const ppm = Math.round((text.wordCount - errors) / timeMinutes);
+    const ppm = timeMinutes > 0 ? Math.round((actualWords - errors) / timeMinutes) : 0;
 
     setEvaluations([...evaluations, {
       id: uuidv4(),
@@ -75,6 +75,7 @@ export function DataProvider({ children }) {
       errors,
       ppm: ppm > 0 ? ppm : 0,
       comprehensionScore,
+      wordsRead: actualWords,
       date: new Date().toISOString()
     }]);
   };
